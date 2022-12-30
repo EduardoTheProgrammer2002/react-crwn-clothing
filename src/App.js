@@ -1,11 +1,22 @@
-import './App.css';
-import Directory from './components/categories/categories.component';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import './App.scss';
+import Home from './routes/home/home.component';
+import Nav from './routes/nav/nav.component';
+import SignIn from './routes/sign-in/sign-in.component';
+
+const Shop = () => (
+  <h1>this is the shop component</h1>
+);
 
 const App = () => {
   return (
-    <div className="app">
-      <Directory />
-    </div>
+    <Routes>
+      <Route path='/' element={<Nav/>}>
+        <Route index element={<Home />} />
+        <Route path='/shop' element={<Shop />} />
+        <Route path='/sign-in' element={<SignIn />} />
+      </Route>
+    </Routes>
   );
 }
 

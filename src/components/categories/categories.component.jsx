@@ -1,5 +1,7 @@
+import { Outlet } from "react-router-dom";
 import CategoryItem from "../category-item/category-item.component";
 import "./categories.styles.scss"
+
 
 const Categories = () => {
     const categories = [
@@ -34,7 +36,7 @@ const Categories = () => {
         <div className="categories-container">
             {categories.map((category) => {
                 return (
-                    <CategoryItem category={category} />
+                    <CategoryItem key={category.id} category={category} />
                 )
             })}
         </div>
