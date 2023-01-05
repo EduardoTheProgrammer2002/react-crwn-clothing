@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/user.context";
 import { createUserDocumentFromAuth, signInWithGooglePopup, signUserInWithEmailAngPassword } from "../../utils/firebase/firebase.utils";
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
@@ -25,8 +26,7 @@ const SignInForm = () => {
 
     const signUserInWithGooglePopup = async () => {
         try {
-            const {user} = await signInWithGooglePopup();
-            await createUserDocumentFromAuth(user);
+            await signInWithGooglePopup();
         } catch (error) {
             console.log(error.code);
         }
@@ -36,7 +36,7 @@ const SignInForm = () => {
         event.preventDefault();
         
         try {
-            const {user} = await signUserInWithEmailAngPassword(email, password);
+            await signUserInWithEmailAngPassword(email, password);
             alert("Sucess! You're logged in");
 
             // reseting a the form's fields
