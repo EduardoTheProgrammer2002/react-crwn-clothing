@@ -5,6 +5,7 @@ import { CartContext } from "../../contexts/cart.context";
 
 const CartIcon = () => {
     const { showDropdown, setShowDropdown } = useContext(CartContext);
+    const {cartCount} = useContext(CartContext);
 
     const toggleCartDropdown = () => {
         setShowDropdown(!showDropdown);
@@ -13,7 +14,7 @@ const CartIcon = () => {
     return (
         <div onClick={toggleCartDropdown} className="cart-icon-container">
             <ShoppingIcon className="shopping-icon"/>
-            <span className="item-count">0</span>
+            <span className="item-count">{cartCount}</span>
         </div>
     )
 }
