@@ -1,10 +1,9 @@
-import './home.styles.scss';
-import Categories from '../../components/categories/categories.component';
+import Directory from '../../components/directory/directory.component';
 
 const Home = () => {
   return (
     <div className="app">
-        <Categories />
+        <Directory />
     </div>
   );
 }
