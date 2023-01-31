@@ -18,7 +18,7 @@ const USER_REDUCER_TYPES = {
     SET_CURRENT_USER: 'SET_CURRENT_USER'
 }
 
-const UserReducer = (state, action) => {
+const userReducer = (state, action) => {
     const {type, payload} = action;
 
     switch (type) {
@@ -39,7 +39,7 @@ const INITIAL_VALUE = {
 
 export const UserContextProvider = ({ children }) => {
     // const [currentUser, setCurrentUser] = useState(null);
-    const [{currentUser}, dispatch] = useReducer(UserReducer, INITIAL_VALUE);
+    const [{currentUser}, dispatch] = useReducer(userReducer, INITIAL_VALUE);
 
     const setCurrentUser = (user) => {
         dispatch({type: USER_REDUCER_TYPES.SET_CURRENT_USER, payload: user});

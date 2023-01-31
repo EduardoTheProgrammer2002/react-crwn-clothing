@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useReducer } from "react";
+import { createAction } from "../utils/reducer/reducer.utils";
 
 export const CartContext = createContext({
     showDropdown: false,
@@ -53,26 +54,67 @@ const removeCartItem = (cartItems, itemToRemove) => {
     );
 }
 
+const CART_REDUCER_TYPES = {
+    SET_SHOW_DROPDOWN: "SET_SHOW_DROPDOWN",
+    SET_CART_ITEMS: "SET_CART_ITEMS"
+}
+
+//CartReducer
+const cartReducer = (state, action) => {
+    const {type, payload} = action
+
+    switch (type) {
+        case CART_REDUCER_TYPES.SET_CART_ITEMS:
+            return {
+                ...state,
+                ...payload
+            }
+        case CART_REDUCER_TYPES.SET_SHOW_DROPDOWN:
+            return {
+                ...state,
+                showDropdown: payload
+            }
+        default:
+            throw new Error(`Type Error: ${type}`);
+    }
+} 
+
+const DEFAULT_CART_STATE = {
+    showDropdown: false,
+    cartItems: [],
+    cartCount: 0,
+    cartTotal: 0
+}
+
 
 export const CartContextProvider = ({children}) => {
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartCount, setCartCount] = useState(0);
-    const [cartTotal, setCartTotal] = useState(0);
+    const [{cartItems, cartCount, cartTotal, showDropdown}, dispatch] = useReducer(cartReducer, DEFAULT_CART_STATE);
 
-    useEffect(() => {
-        const newCartCount = cartItems.reduce((total, item) => {
+    const setShowDropdown = (state) => {
+        dispatch(
+            createAction(CART_REDUCER_TYPES.SET_SHOW_DROPDOWN, state)
+        )
+    }
+
+    const setCartItems = (newCartItems) => {
+        //set the cartCount
+        const newCartCount = newCartItems.reduce((total, item) => {
             return total + item.quantity;
         }, 0);
-        setCartCount(newCartCount);
-    }, [cartItems])
 
-    useEffect(() => {
-        const newCartTotal = cartItems.reduce((total, item) => {
+        const newCartTotal = newCartItems.reduce((total, item) => {
             return total + (item.price * item.quantity);
         }, 0);
-        setCartTotal(newCartTotal);
-    }, [cartItems])
+
+        const payload = {
+            cartCount: newCartCount,
+            cartTotal: newCartTotal,
+            cartItems: newCartItems
+        }
+        dispatch(
+            createAction(CART_REDUCER_TYPES.SET_CART_ITEMS, payload)
+        );
+    } 
 
     const addItemToCart = (itemToAdd) => {
         const cartItemsUpdate = addCartItem(cartItems, itemToAdd);
