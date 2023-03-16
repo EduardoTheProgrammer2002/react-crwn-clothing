@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import {} from 'firebase/auth'
-import { 
+import { } from 'firebase/auth'
+import {
     getAuth,
     signInWithPopup,
     GoogleAuthProvider,
@@ -31,7 +31,7 @@ const firebaseConfig = {
     messagingSenderId: "415644198900",
     appId: "1:415644198900:web:94e599ee710bf47328bba1"
 };
-  
+
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
@@ -62,26 +62,22 @@ export const addCollectionAndDocs = async (collectionKey, objectsToAdd) => {
 export const getCollectionAndDocs = async () => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
-    
+
     const querrySnapshot = await getDocs(q);
 
-    const categoryMap = querrySnapshot.docs.reduce((acc, docSnapshot) => {
-        const {title, items} = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc
-    }, {})
+    const categoryMap = querrySnapshot.docs.map((snapShot) => snapShot.data())
 
     return categoryMap;
 };
 
-export const createUserDocumentFromAuth = async (userAuth, additional={}) => {
+export const createUserDocumentFromAuth = async (userAuth, additional = {}) => {
     const userDocRef = await doc(db, 'users', userAuth.uid);
 
     const userSnapshot = await getDoc(userDocRef);
-    
+
     //if the userDoc does not exist, we want to create a doc for the especific user signing in
-    if(!userSnapshot.exists()) {
-        const {displayName, email} = userAuth;
+    if (!userSnapshot.exists()) {
+        const { displayName, email } = userAuth;
         const createdAt = new Date();
 
         try {
@@ -115,5 +111,5 @@ export const signUserInWithEmailAngPassword = async (email, password) => {
 
 export const signOutUser = async () => await signOut(auth);
 
-export const OnAuthStateChangesListener = (callback) => 
+export const OnAuthStateChangesListener = (callback) =>
     onAuthStateChanged(auth, callback);

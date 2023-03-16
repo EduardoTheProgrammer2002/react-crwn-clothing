@@ -5,22 +5,17 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './index.scss';
 import App from './App';
-import { UserContextProvider } from './contexts/user.context';
-import { CartContextProvider } from './contexts/cart.context';
-import { CategoriesContextProvider } from './contexts/categories.context';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <UserContextProvider>
-        <CategoriesContextProvider>
-          <CartContextProvider>
-            <App />
-          </CartContextProvider>
-        </CategoriesContextProvider>
-      </UserContextProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
