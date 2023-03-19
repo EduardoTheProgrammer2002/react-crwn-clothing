@@ -30,7 +30,7 @@ const Checkout = () => {
             {
                 cartItems.map((item) => {
                     return (
-                        <CheckoutItem cartItem={item} />
+                        <CheckoutItem key={item.name} cartItem={item} />
                     )
                 })
             }
