@@ -4,10 +4,13 @@ import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 
 //styles components
-import { 
+import {
     SignInContainer,
     BtnContainer
 } from "./sign-in-form.styles";
+import { useDispatch } from "react-redux";
+import { USER_ACTION_TYPES } from "../../redux/user/user.types";
+import { emailSignInStart, googleSignInStart } from "../../redux/user/user.action";
 
 
 
@@ -18,6 +21,7 @@ const defaultFormFields = {
 }
 
 const SignInForm = () => {
+    const dispatch = useDispatch();
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password } = formFields;
 
@@ -26,39 +30,27 @@ const SignInForm = () => {
     }
 
     const onChangeHandler = (event) => {
-        const {name, value} = event.target;
-        setFormFields({...formFields, [name]: value})
+        const { name, value } = event.target;
+        setFormFields({ ...formFields, [name]: value })
     }
 
-    const signUserInWithGooglePopup = async () => {
-        try {
-            await signInWithGooglePopup();
-        } catch (error) {
-            console.log(error.code);
-        }
+    const signUserInWithGooglePopup = () => {
+        dispatch(googleSignInStart(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START));
     }
+
+
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
-        
+
         try {
-            await signUserInWithEmailAngPassword(email, password);
+            dispatch(emailSignInStart(email, password))
             alert("Sucess! You're logged in");
 
             // reseting a the form's fields
             resetFormFields();
         } catch (error) {
-            switch (error.code) {
-                case "auth/user-not-found":
-                    alert("No user with that email, please create an account...")
-                    break;
-                case "auth/wrong-password":
-                    alert("Incorrect password, try again!")
-                    break;
-                default:
-                    console.log(error);
-            }
-            
+            console.log(error.code);
         }
     }
 
@@ -67,7 +59,7 @@ const SignInForm = () => {
             <h2>Do you have an account?</h2>
             <h4>Sign in with your email and password</h4>
             <form onSubmit={onSubmitHandler}>
-                <FormInput 
+                <FormInput
                     label="Email"
                     onChange={onChangeHandler}
                     type='email'
@@ -76,7 +68,7 @@ const SignInForm = () => {
                     value={email}
                 />
 
-                <FormInput 
+                <FormInput
                     label="Password"
                     onChange={onChangeHandler}
                     type='password'
